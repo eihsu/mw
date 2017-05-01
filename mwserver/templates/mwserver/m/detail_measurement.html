@@ -1,0 +1,19 @@
+{% extends 'mwserver/base.html' %}
+
+{% block content %}
+
+<h3>Detail View, Measurement {{ m.id }}</h3>
+
+<ul>
+  <li>
+    <b>Name: </b>{{ m.name }}
+  </li>
+  <li>
+    <b>Weight (Lbs.): </b>{{ m.weight }}
+  </li>
+  <li>
+    <b>Date: </b>{{ m.date|date:'M d, Y H:m' }}
+  </li>
+</ul>
+
+{% endblock %}

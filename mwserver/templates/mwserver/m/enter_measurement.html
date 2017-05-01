@@ -1,0 +1,31 @@
+{% extends 'mwserver/base.html' %}
+
+{% block content %}
+
+<h3>Enter a Measurement</h3>
+
+{% if error_message %}
+  <p><strong>{{error_message}}</strong></p>
+{% endif %}
+
+<form action="{% url 'mwserver:post_measurement' %}"
+      method="post">
+  {% csrf_token %}
+  Name:<br>
+  {% if user_name %}
+    <input type="text" name="name" size="3"
+           value="zz{{ user_name }}"><br>
+  {% else %}
+    <input type="text" name="name" size="3"><br>
+  {% endif %}
+  Weight (Lbs.):<br>
+  <input type="text" name="weight"><br>
+  Date/Time:<br>
+  <input type="datetime-local" name="datetime"><br>
+  <br>
+  <input type="submit">
+</form>
+
+{% endblock %}
+
+

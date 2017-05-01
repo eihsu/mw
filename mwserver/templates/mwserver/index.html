@@ -1,0 +1,28 @@
+{% extends 'mwserver/base.html' %}
+
+{% block content %}
+
+<h3>Most Recent Measurements:</h3>
+{% if latest_measurements %}
+<ul>
+  {% for m in latest_measurements %}
+  <li>
+    {{ m.name }}: {{ m.weight }}&nbsp;
+    <a href="{% url 'mwserver:detail_measurement' m.id %}">
+      [{{ m.date|date:'M d, Y H:m' }}]
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>(No measurements are available yet.)</p>
+{% endif %}
+
+<br>
+
+<button type=button
+	onclick="location.href='{% url 'mwserver:enter_measurement' %}'">
+  Enter a New Measurement
+</button>
+
+{% endblock %}

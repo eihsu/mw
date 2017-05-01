@@ -1,0 +1,11 @@
+
+datetime picker
+
+admin site customization
+https://docs.djangoproject.com/en/1.11/intro/tutorial07/
+
+favicon
+
+
+on to fitbit
+

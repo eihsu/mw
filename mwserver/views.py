@@ -1,28 +1,55 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
-
-from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 
 from .models import Measurement
 
 # Create your views here.
 
 def index(req):
-    latest_measurements = Measurement.objects.order_by('-date')[:5]
-    recs = [ m.name + ':' + str(m.weight) + ' ' + m.date.strftime("[%Y %b %d]")
-             for m in latest_measurements ]
-    output = ', '.join(recs)
-    return HttpResponse("Hello, world--this is the MW index.<br><br>"
-                        + output)
+    latest_measurements = Measurement.objects.order_by('-date')[:20]
+    context = { 'latest_measurements' : latest_measurements }
+    return render(req, 'mwserver/index.html', context)
 
 def detail_user(req, id):
     return HttpResponse("Here would be some details for user %s." % id)
 
 def detail_measurement(req, id):
-    return HttpResponse("Here would be some details for measurement %s." % id)
+    measurement = get_object_or_404(Measurement, pk=id)
+    context = { 'm' : measurement }
+    return render(req, 'mwserver/m/detail_measurement.html', context)
 
 def enter_measurement(req):
-    return HttpResponse("Here you would enter a measurement.")
+    context = {}
+    return render(req, 'mwserver/m/enter_measurement.html', context)
 
+def post_measurement(req):
+    try:
+        Measurement.objects.create(name = req.POST['name'],
+                                   weight = req.POST['weight'],
+                                   date = req.POST['datetime'])
+    except Exception as e:
+        return HttpResponse("Problem entering weight.\n({}) {}".
+                            format(type(e), e.message))
+    else:
+        return HttpResponseRedirect(reverse('mwserver:index'))
+    
+def report_lametric(req):
+    dummy = """
+{
+  "frames": [
+    {
+      "text": "MHX LBS",
+      "icon": "a343"
+    },
+    {
+      "text": "15.8 LBS",
+      "icon": null
+    }
+  ]
+}
+"""
+    return HttpResponse(dummy)
